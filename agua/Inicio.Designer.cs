@@ -45,11 +45,11 @@
             // 
             // btnCadastrar
             // 
-            btnCadastrar.Location = new Point(573, 71);
+            btnCadastrar.Location = new Point(495, 52);
             btnCadastrar.Name = "btnCadastrar";
             btnCadastrar.Size = new Size(122, 23);
             btnCadastrar.TabIndex = 4;
-            btnCadastrar.Text = "Cadastrar Contato";
+            btnCadastrar.Text = "Adicionar Contato";
             btnCadastrar.UseVisualStyleBackColor = true;
             btnCadastrar.Click += btnCadastrar_Click;
             // 

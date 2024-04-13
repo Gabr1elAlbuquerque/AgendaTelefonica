@@ -129,48 +129,7 @@ namespace agua
             }
         }
 
-        private void SalvarDados()
-        {
-            string nome = txtNome.Text.Trim();
-            // Se ambos os dados forem válidos, salva-os
-            List<string> listCelular = new List<string>();
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                if (!row.IsNewRow)
-                {
-                    string celular = Convert.ToString(row.Cells[0].Value);
-                    listCelular.Add(celular);
-                }
-            }
-
-            List<string> listTelefone = new List<string>();
-            foreach (DataGridViewRow row in dataGridView2.Rows)
-            {
-                if (!row.IsNewRow)
-                {
-                    string telefone = Convert.ToString(row.Cells[0].Value);
-                    listTelefone.Add(telefone);
-                }
-            }
-
-            string emailx = txtEmail.Text.Trim().Equals("") ? null : txtEmail.Text;
-            Contato c = new Contato(nome, emailx, listTelefone, listCelular);
-
-            contatoAux = c;
-
-            // Adiciona o novo contato à lista de contatos
-            listaDeContatos.Add(c);
-
-            // Serializa a lista atualizada de contatos de volta para JSON
-            string path = "..\\..\\..\\contatos.json";
-            string json = JsonConvert.SerializeObject(listaDeContatos, Formatting.Indented);
-
-            // Salva o JSON no arquivo
-            File.WriteAllText(path, json);
-
-            MessageBox.Show("Dados salvos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
+       
 
 
 
@@ -261,83 +220,8 @@ namespace agua
 
         }
 
-        private bool VerificarNumeroCelular()
-        {
-            bool valido = true;
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-
-
-                if (!row.IsNewRow)
-                {
-                    string celular = Convert.ToString(row.Cells[0].Value);
-                    if (celular.IndexOf("(00)") != -1)
-                    {
-
-                        valido = false;
-                        MessageBox.Show($"{celular} não é um número válido.");
-                        break;
-
-                    }
-                }
-            }
-
-            return valido;
-        }
-
-        private bool VerificarNumeroTelefone()
-        {
-
-            bool valido = true;
-            foreach (DataGridViewRow row in dataGridView2.Rows)
-            {
-
-
-                if (!row.IsNewRow)
-                {
-                    string telefone = Convert.ToString(row.Cells[0].Value);
-                    if (telefone.IndexOf("(00)") != -1)
-                    {
-
-                        valido = false;
-                        MessageBox.Show($"{telefone} não é um número válido.");
-                        break;
-                    }
-                }
-            }
-
-            return valido;
-        }
-        private bool VerificarEmail(string Celular)
-        {
-            int index = Celular.IndexOf(".com");
-            int index2 = Celular.IndexOf("@");
-            int index3 = Celular.IndexOf(" ");
-            int index4 = Celular.IndexOf(" ");
-            if (index != -1 && index2 != -1 && index3 == -1 && index4 == -1)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private bool ValidaNome(string nome)
-        {
-            bool valido = true;
-
-
-            if (nome.Contains(" ") || nome.Trim().Equals(""))
-            {
-                valido = false;
-            }
-            else if (!char.IsLetter(nome[0]))
-            {
-                valido = false;
-            }
-
-            return valido;
-        }
-
+       
+       
 
 
         private void DataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -350,32 +234,6 @@ namespace agua
                 dataGridView2.Rows.RemoveAt(e.RowIndex);
             }
         }
-
-
-
-
-        private bool NomeJaExiste(List<Contato> contatos, string nome)
-        {
-
-            return contatos.Any(c => c.Nome != null && c.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
-        }
-
-
-        private bool EmailJaExiste(List<Contato> contatos, string email)
-        {
-            return contatos.Any(c => c.Email != null && c.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private bool TelefoneJaExiste(string telefone)
-        {
-            return listaDeContatos.Any(c => c.Telefones.Contains(telefone));
-        }
-
-        private bool CelularJaExiste(string celular)
-        {
-            return listaDeContatos.Any(c => c.Celulares.Contains(celular));
-        }
-
 
 
         private List<Contato> CarregarContatos()
@@ -403,19 +261,15 @@ namespace agua
 
         private void btnSalvar_Click_1(object sender, EventArgs e)
         {
+
+            Validacao  validacao  = new Validacao ();
+
             string novoNome = txtNome.Text.Trim();
             string novoEmail = txtEmail.Text.Trim();
-            bool nomeValido = true;
+         
 
             int quantCelulares = dataGridView1.RowCount - 1;
             int quantTelefones = dataGridView2.RowCount - 1;
-
-
-            if (!ValidaNome(novoNome))
-            {
-                MessageBox.Show("Digite um nome válido");
-                return;
-            }
 
 
 
@@ -425,21 +279,39 @@ namespace agua
                 return;
             }
 
-
-            if (!VerificarNumeroCelular())
+            if (!validacao.ValidaNome(novoNome))
             {
-
-                return;
-            }
-            if (!VerificarNumeroTelefone())
-            {
-
+                MessageBox.Show("Digite um nome válido");
                 return;
             }
 
 
 
-            if (NomeJaExiste(listaDeContatos, novoNome))
+
+
+            if (!validacao.VerificarNumeroCelular(dataGridView1))
+            {
+
+                return;
+            }
+            if (!validacao.VerificarNumeroTelefone(dataGridView2))
+            {
+
+                return;
+            }
+
+           
+
+
+            if (!validacao.VerificarEmail(novoEmail))
+            {
+                MessageBox.Show("Digite um e-mail valido agua");
+                return;
+            }
+
+
+
+            if (validacao.NomeJaExiste(listaDeContatos, novoNome))
             {
                 if (contatoAux.Nome != novoNome)
                 {
@@ -448,9 +320,9 @@ namespace agua
                 }
             }
 
-            if (!string.IsNullOrEmpty(novoEmail) && EmailJaExiste(listaDeContatos, novoEmail))
+            if (!string.IsNullOrEmpty(novoEmail) && validacao.EmailJaExiste(listaDeContatos, novoEmail))
             {
-                if (contatoAux.Nome != novoNome)
+                if (contatoAux.Email != novoEmail)
                 {
                     MessageBox.Show("Já existe um contato com esse email.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -465,7 +337,7 @@ namespace agua
                     string celular = Convert.ToString(row.Cells[0].Value);
                     if (!contatoAux.Celulares.Contains(celular))
                     {
-                        if (CelularJaExiste(celular))
+                        if (validacao.CelularJaExiste(listaDeContatos,celular))
                         {
                             MessageBox.Show("Já existe um contato com esse celular.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
@@ -484,7 +356,7 @@ namespace agua
                     string telefone = Convert.ToString(row.Cells[0].Value);
                     if (!contatoAux.Telefones.Contains(telefone))
                     {
-                        if (TelefoneJaExiste(telefone))
+                        if (validacao.TelefoneJaExiste(listaDeContatos,telefone))
                         {
                             MessageBox.Show("Já existe um contato com esse telefone.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
@@ -496,29 +368,21 @@ namespace agua
             // Se não houver duplicatas, você pode salvar os dados
 
 
-            Regex regex = new Regex(@"^[A-Za-z0-9_@.-]+$");
-
-            char caractere = '@';
-
-            int count = novoEmail.Count(c => c == caractere);
 
 
 
-            if ((!regex.IsMatch(novoEmail) || count > 1 || !
-                VerificarEmail(novoEmail)) && !txtEmail.Text.Trim().Equals(""))
-            {
-                MessageBox.Show("Digite um e-mail valido agua");
-                return;
-            }
+            ArquivoJson contatosJson = new ArquivoJson();
 
-
-
-
-            ApagarContatoPorNome(contatoAux.Nome);
+            listaDeContatos.RemoveAll(c => c.Nome.Equals(contatoAux.Nome, StringComparison.OrdinalIgnoreCase));
             //arrumar isso aqui
-            SalvarDados();
 
+
+            contatosJson.SalvarDados(listaDeContatos, novoNome, novoEmail, dataGridView1, dataGridView2);
+            
             inicioAux.AtualizarContatos();
+
+         
+            MessageBox.Show("Dados salvos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -536,23 +400,13 @@ namespace agua
         }
 
 
-        private void ApagarContatoPorNome(string nome)
-        {
-          
-            listaDeContatos.RemoveAll(c => c.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
-
-            // Serializa a lista atualizada de contatos de volta para JSON
-            string path = "..\\..\\..\\contatos.json";
-            string json = JsonConvert.SerializeObject(listaDeContatos, Formatting.Indented);
-
-            // Salva o JSON no arquivo
-            File.WriteAllText(path, json);
-
-        }
+       
 
         private void btnApagar_Click(object sender, EventArgs e)
         {
-            ApagarContatoPorNome(contatoAux.Nome);
+            ArquivoJson contatosJson = new ArquivoJson();
+
+            contatosJson.ApagarContatoPorNome(listaDeContatos,contatoAux.Nome);
            
             inicioAux.AtualizarContatos();
             MessageBox.Show($"{contatoAux.Nome} foi deletado com sucesso");

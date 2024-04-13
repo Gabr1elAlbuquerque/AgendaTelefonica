@@ -25,10 +25,10 @@ namespace agua
             // Verifica se o arquivo existe
             if (File.Exists(filePath))
             {
-                // Lê todo o conteúdo do arquivo
+             
                 string json = File.ReadAllText(filePath);
 
-                // Desserializa o JSON em uma lista de objetos Contato
+                
                 contatos = JsonConvert.DeserializeObject<List<Contato>>(json);
             }
             else
