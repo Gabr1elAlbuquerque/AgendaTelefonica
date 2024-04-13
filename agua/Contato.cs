@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-
+// classe de contato
 public class Contato
 {
 

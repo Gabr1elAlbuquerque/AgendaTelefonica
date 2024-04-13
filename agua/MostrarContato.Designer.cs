@@ -35,6 +35,9 @@
             btnEditar = new Button();
             btnSalvar = new Button();
             btnApagar = new Button();
+            btnDescartarAlteracoes = new Button();
+            label1 = new Label();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
@@ -42,46 +45,46 @@
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(84, 30);
+            dataGridView1.Location = new Point(6, 175);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(240, 150);
-            dataGridView1.TabIndex = 0;
+            dataGridView1.TabIndex = 3;
             // 
             // dataGridView2
             // 
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(84, 217);
+            dataGridView2.Location = new Point(252, 175);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.Size = new Size(240, 150);
-            dataGridView2.TabIndex = 1;
+            dataGridView2.TabIndex = 4;
             // 
             // txtNome
             // 
-            txtNome.Location = new Point(409, 146);
+            txtNome.Location = new Point(12, 60);
             txtNome.Name = "txtNome";
-            txtNome.Size = new Size(100, 23);
-            txtNome.TabIndex = 2;
+            txtNome.Size = new Size(244, 23);
+            txtNome.TabIndex = 1;
             // 
             // txtEmail
             // 
-            txtEmail.Location = new Point(557, 146);
+            txtEmail.Location = new Point(12, 136);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(100, 23);
-            txtEmail.TabIndex = 3;
+            txtEmail.Size = new Size(244, 23);
+            txtEmail.TabIndex = 2;
             // 
             // btnEditar
             // 
-            btnEditar.Location = new Point(532, 38);
+            btnEditar.Location = new Point(305, 379);
             btnEditar.Name = "btnEditar";
             btnEditar.Size = new Size(103, 23);
-            btnEditar.TabIndex = 4;
+            btnEditar.TabIndex = 0;
             btnEditar.Text = "Editar dados";
             btnEditar.UseVisualStyleBackColor = true;
             btnEditar.Click += btnEditar_Click;
             // 
             // btnSalvar
             // 
-            btnSalvar.Location = new Point(516, 231);
+            btnSalvar.Location = new Point(12, 379);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.Size = new Size(75, 23);
             btnSalvar.TabIndex = 5;
@@ -91,19 +94,50 @@
             // 
             // btnApagar
             // 
-            btnApagar.Location = new Point(693, 49);
+            btnApagar.Location = new Point(224, 379);
             btnApagar.Name = "btnApagar";
             btnApagar.Size = new Size(75, 23);
-            btnApagar.TabIndex = 6;
+            btnApagar.TabIndex = 7;
             btnApagar.Text = "Apagar";
             btnApagar.UseVisualStyleBackColor = true;
             btnApagar.Click += btnApagar_Click;
+            // 
+            // btnDescartarAlteracoes
+            // 
+            btnDescartarAlteracoes.Location = new Point(93, 379);
+            btnDescartarAlteracoes.Name = "btnDescartarAlteracoes";
+            btnDescartarAlteracoes.Size = new Size(125, 23);
+            btnDescartarAlteracoes.TabIndex = 6;
+            btnDescartarAlteracoes.Text = "Descartar alterações";
+            btnDescartarAlteracoes.UseVisualStyleBackColor = true;
+            btnDescartarAlteracoes.Click += btnDescartarAlteracoes_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 42);
+            label1.Name = "label1";
+            label1.Size = new Size(43, 15);
+            label1.TabIndex = 8;
+            label1.Text = "Nome:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 118);
+            label2.Name = "label2";
+            label2.Size = new Size(44, 15);
+            label2.TabIndex = 9;
+            label2.Text = "E-mail:";
             // 
             // MostrarContato
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(btnDescartarAlteracoes);
             Controls.Add(btnApagar);
             Controls.Add(btnSalvar);
             Controls.Add(btnEditar);
@@ -113,6 +147,7 @@
             Controls.Add(dataGridView1);
             Name = "MostrarContato";
             Text = "MostrarContato";
+            Load += MostrarContato_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ResumeLayout(false);
@@ -128,5 +163,8 @@
         private Button btnEditar;
         private Button btnSalvar;
         private Button btnApagar;
+        private Button btnDescartarAlteracoes;
+        private Label label1;
+        private Label label2;
     }
 }

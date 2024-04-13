@@ -9,8 +9,10 @@ namespace agua
 {
     public partial class Inicio : Form
     {
-        private List<Contato> contatos; 
+       // lista de contatos
+       public List<Contato> listaDeContatos; 
 
+        // construtor do arquivo
         public Inicio()
         {
             InitializeComponent();
@@ -18,18 +20,18 @@ namespace agua
             CarregaLista();
         }
 
+        //carrega a lisat com os dados do arquivo
         public void CarregarContatosDoJson()
         {
             string filePath = "..\\..\\..\\contatos.json";
 
-            // Verifica se o arquivo existe
             if (File.Exists(filePath))
             {
              
                 string json = File.ReadAllText(filePath);
 
-                
-                contatos = JsonConvert.DeserializeObject<List<Contato>>(json);
+
+                listaDeContatos = JsonConvert.DeserializeObject<List<Contato>>(json);
             }
             else
             {
@@ -37,24 +39,20 @@ namespace agua
             }
         }
 
+        //carrega a lista de contatos
         public void CarregaLista()
         {
-            // Verifica se a lista de contatos foi carregada
-            if (contatos == null || contatos.Count == 0)
+
+            if (listaDeContatos == null || listaDeContatos.Count == 0)
             {
                 MessageBox.Show("Não há contatos para carregar!");
                 return;
             }
 
-            // Agrupa os nomes por letra maiúscula
-            var grupos = contatos
+            var grupos = listaDeContatos
                 .Select(c => c.Nome)
                 .OrderBy(nome => nome)
                 .GroupBy(nome => char.ToUpper(nome[0]));
-
-
-
-            // Adiciona os grupos ao ListBox
             foreach (var grupo in grupos)
             {
                 listBox1.Items.Add($"-- {grupo.Key} --"); // Adiciona a letra maiúscula como cabeçalho
@@ -66,10 +64,9 @@ namespace agua
 
                 }
             }
-
-
         }
 
+        // evento que dispara quando da dois cliques em um dado na lista
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
             if (listBox1.SelectedItem != null)
@@ -78,7 +75,7 @@ namespace agua
                 string nomeSelecionado = listBox1.SelectedItem.ToString();
 
                 // Procura na lista de contatos pelo nome correspondente
-                Contato contato = contatos.Find(c => c.Nome == nomeSelecionado);
+                Contato contato = listaDeContatos.Find(c => c.Nome == nomeSelecionado);
 
                 // Se o contato for encontrado, exibe seus dados em um MessageBox
                 if (contato != null)
@@ -89,31 +86,23 @@ namespace agua
                 }
                 else
                 {
-                    MessageBox.Show("Contato não encontrado!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    
                 }
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            new MostrarContato().Show();
-        }
-
+        // evento que acontece ao clilcar no botão btnCadastrar
         private void btnCadastrar_Click(object sender, EventArgs e)
         {
             new Form1(this).Show();
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        // atualiza os contatos json e atualiza eles na tela
         public void AtualizarContatos()
         {
             listBox1.Items.Clear();
-            CarregarContatosDoJson(); // Atualiza a lista de contatos
-            CarregaLista(); // Atualiza a ListBox com os novos contatos
+            CarregarContatosDoJson(); 
+            CarregaLista(); 
         }
     }
 }

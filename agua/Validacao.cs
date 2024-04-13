@@ -8,16 +8,16 @@ using System.Windows.Forms;
 
 namespace agua
 {
+    // classe responsavel pelas validações
     internal class Validacao
     {
 
         private Regex regex = new Regex(@"^[A-Za-z0-9_@.-]+$");
 
-
+        // verifica o nome digitado é valido
         public bool ValidaNome(string nome)
         {
             bool valido = true;
-
 
             if (nome.Contains(" ") || nome.Trim().Equals(""))
             {
@@ -31,6 +31,7 @@ namespace agua
             return valido;
         }
 
+        // verifica se o número de celular é valido
         public bool VerificarNumeroCelular(DataGridView dataCelualr)
         {
             bool valido = true;
@@ -55,13 +56,13 @@ namespace agua
             return valido;
         }
 
+        // verifica se o número de celular é valido
         public bool VerificarNumeroTelefone(DataGridView dataTelefone)
         {
 
             bool valido = true;
             foreach (DataGridViewRow row in dataTelefone.Rows)
             {
-
 
                 if (!row.IsNewRow)
                 {
@@ -78,13 +79,13 @@ namespace agua
 
             return valido;
         }
+
+        // verifica o email é um email valido
         public bool VerificarEmail(string email)
         {
 
             if (!email.Trim().Equals(""))
             {
-
-
 
                 int index = email.IndexOf(".com");
                 int index2 = email.IndexOf("@");
@@ -109,50 +110,35 @@ namespace agua
                 return true;
             }
 
-
-
-
-
         }
 
 
-
-
-
-
+        // verifica se o nome já existena lista de contatos
         public bool NomeJaExiste(List<Contato> contatos, string nome)
         {
 
             return contatos.Any(c => c.Nome != null && c.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
         }
 
-
+        // verifica se o email já existena lista de contatos
         public bool EmailJaExiste(List<Contato> contatos, string email)
         {
             return contatos.Any(c => c.Email != null && c.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
+        // verifica se o telefone já existena lista de contatos
         public bool TelefoneJaExiste(List<Contato> contatos, string telefone)
         {
             return contatos.Any(c => c.Telefones.Contains(telefone));
         }
 
+        // verifica se o celular já existena lista de contatos
         public bool CelularJaExiste(List<Contato> contatos, string celular)
         {
             return contatos.Any(c => c.Celulares.Contains(celular));
         }
 
-
-
-
     }
-
-
-
-
-
-
-
 
 }
 

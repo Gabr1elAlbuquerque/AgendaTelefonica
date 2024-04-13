@@ -12,9 +12,10 @@ namespace agua
     public partial class Form1 : Form
     {
 
-        private List<Contato> listaDeContatos;
+        //variavel aux que vai receber o form de inicio
         private Inicio inicioAux;
 
+        // construtor
         public Form1(Inicio inicio)
         {
             InitializeComponent();
@@ -22,9 +23,10 @@ namespace agua
             InitializeDataGridView2();
             inicioAux = inicio;
 
-            listaDeContatos = CarregarContatos();
+
         }
 
+        // metodo responsavel por iniciar o grid2
         private void InitializeDataGridView2()
         {
             dataGridView2.ColumnCount = 1;
@@ -44,6 +46,7 @@ namespace agua
             dataGridView2.CellContentClick += DataGridView2_CellContentClick;
         }
 
+        // evento que controla a a mudança de textos
         private void DataGridView2_EditingControlShowing(object? sender, DataGridViewEditingControlShowingEventArgs e)
         {
             TextBox textBox = e.Control as TextBox;
@@ -52,7 +55,7 @@ namespace agua
                 textBox.TextChanged += TextBox2_TextChanged;
             }
         }
-
+        //Evento responsável pelo controle  de alterar o texto no grid
         private void TextBox2_TextChanged(object? sender, EventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -96,11 +99,7 @@ namespace agua
             }
         }
 
-       
-
-
-     
-
+        // metodo responsavel por iniciar o grid
         private void InitializeDataGridView()
         {
             dataGridView1.ColumnCount = 1;
@@ -120,6 +119,7 @@ namespace agua
             dataGridView1.CellContentClick += DataGridView1_CellContentClick;
         }
 
+        // evento que é chamado quando clico no botão excluir no dataGrid2
         private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn();
@@ -131,6 +131,7 @@ namespace agua
             }
         }
 
+        // evento que controla a a mudança de textos
         private void DataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             TextBox textBox = e.Control as TextBox;
@@ -140,6 +141,7 @@ namespace agua
             }
         }
 
+        //Evento responsável pelo controle  de alterar o texto no grid
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -188,18 +190,17 @@ namespace agua
 
         }
 
-      
-       
+
+        // evento que acontece ao clilcar no botão btnSalvar
         private void btnSalvar_Click(object sender, EventArgs e)
         {
             string novoNome = txtNome.Text.Trim();
             string novoEmail = txtEmail.Text.Trim();
-         
+
             Validacao validacao = new Validacao();
 
             int quantCelulares = dataGridView1.RowCount - 1;
             int quantTelefones = dataGridView2.RowCount - 1;
-
 
             if (!validacao.ValidaNome(novoNome))
             {
@@ -207,29 +208,22 @@ namespace agua
                 return;
             }
 
-
-
-            if ( quantTelefones <1 &&quantCelulares<1)
+            if (quantTelefones < 1 && quantCelulares < 1)
             {
                 MessageBox.Show("Digite pelo menos 1 celular ou 1 telefone", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-
             if (!validacao.VerificarNumeroCelular(dataGridView1))
             {
-               
+
                 return;
             }
             if (!validacao.VerificarNumeroTelefone(dataGridView2))
             {
-              
+
                 return;
             }
-
-
-
-
 
             if (!validacao.VerificarEmail(novoEmail))
             {
@@ -237,16 +231,13 @@ namespace agua
                 return;
             }
 
-
-
-
-            if (validacao.NomeJaExiste(listaDeContatos, novoNome))
+            if (validacao.NomeJaExiste(inicioAux.listaDeContatos, novoNome))
             {
                 MessageBox.Show("Já existe um contato com esse nome.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (!string.IsNullOrEmpty(novoEmail) && validacao.EmailJaExiste(listaDeContatos, novoEmail))
+            if (!string.IsNullOrEmpty(novoEmail) && validacao.EmailJaExiste(inicioAux.listaDeContatos, novoEmail))
             {
                 MessageBox.Show("Já existe um contato com esse email.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -257,7 +248,7 @@ namespace agua
                 if (!row.IsNewRow)
                 {
                     string celular = Convert.ToString(row.Cells[0].Value);
-                    if (validacao.CelularJaExiste(listaDeContatos,celular))
+                    if (validacao.CelularJaExiste(inicioAux.listaDeContatos, celular))
                     {
                         MessageBox.Show("Já existe um contato com esse celular.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -270,7 +261,7 @@ namespace agua
                 if (!row.IsNewRow)
                 {
                     string telefone = Convert.ToString(row.Cells[0].Value);
-                    if (validacao.TelefoneJaExiste(listaDeContatos, telefone))
+                    if (validacao.TelefoneJaExiste(inicioAux.listaDeContatos, telefone))
                     {
                         MessageBox.Show("Já existe um contato com esse telefone.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -279,14 +270,14 @@ namespace agua
             }
 
             ArquivoJson contatosJson = new ArquivoJson();
-            contatosJson.SalvarDados(listaDeContatos, novoNome, novoEmail, dataGridView1, dataGridView2);
+            contatosJson.SalvarDados(inicioAux.listaDeContatos, novoNome, novoEmail, dataGridView1, dataGridView2);
             inicioAux.AtualizarContatos();
 
             MessageBox.Show("Dados salvos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-
         }
 
+        // evento que é chamado quando clico no botão excluir no dataGrid2
         private void DataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn();
@@ -298,36 +289,19 @@ namespace agua
             }
         }
 
+        // evento que acontece ao clilcar no botão  btnLimpar
         private void btnLimpar_Click(object sender, EventArgs e)
         {
-         
-            dataGridView1.Rows.Clear(); 
-            dataGridView2.Rows.Clear(); 
+
+            dataGridView1.Rows.Clear();
+            dataGridView2.Rows.Clear();
             txtEmail.Text = "";
             txtNome.Text = "";
 
 
         }
 
-        private List<Contato> CarregarContatos()
-        {
-            string path = "..\\..\\..\\contatos.json";
-            List<Contato> contatos = new List<Contato>();
-
-            // Verifica se o arquivo existe
-            if (File.Exists(path))
-            {
-                // Lê o conteúdo do arquivo
-                string json = File.ReadAllText(path);
-
-                // Desserializa o JSON para obter a lista de contatos
-                contatos = JsonConvert.DeserializeObject<List<Contato>>(json);
-            }
-
-            return contatos;
-        }
-
-       
+      
     }
 
 }

@@ -40,15 +40,14 @@
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(428, 244);
             listBox1.TabIndex = 0;
-            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             listBox1.DoubleClick += listBox1_DoubleClick;
             // 
             // btnCadastrar
             // 
-            btnCadastrar.Location = new Point(495, 52);
+            btnCadastrar.Location = new Point(468, 48);
             btnCadastrar.Name = "btnCadastrar";
             btnCadastrar.Size = new Size(122, 23);
-            btnCadastrar.TabIndex = 4;
+            btnCadastrar.TabIndex = 1;
             btnCadastrar.Text = "Adicionar Contato";
             btnCadastrar.UseVisualStyleBackColor = true;
             btnCadastrar.Click += btnCadastrar_Click;

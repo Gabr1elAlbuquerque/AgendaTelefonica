@@ -9,10 +9,13 @@ using System.Windows.Forms;
 namespace agua
 {
     
-
+    // classe para mexer no arquivo json
     internal class ArquivoJson
     {
-        public Contato contato {  get; set; }
+        // contato aux para usar quando edito um contato
+        public Contato contato { get; set; }
+
+        // salva contatos la lista de contatos
         public void SalvarDados(List<Contato> listaDeContatos, string nome, string email, DataGridView numerosCelular, DataGridView numerosTelefone)
         {
 
@@ -40,32 +43,26 @@ namespace agua
             string emailx = email.Trim().Equals("") ? null : email;
             Contato novoContato = new Contato(nome, emailx, listTelefone, listCelular);
 
-
-
-            // Adiciona o novo contato à lista de contatos
             listaDeContatos.Add(novoContato);
 
-            // Serializa a lista atualizada de contatos de volta para JSON
+            contato = novoContato;
+
             string path = "..\\..\\..\\contatos.json";
             string json = JsonConvert.SerializeObject(listaDeContatos, Formatting.Indented);
 
-            // Salva o JSON no arquivo
             File.WriteAllText(path, json);
-
-            contato = novoContato;  
 
         }
 
+        // apaga um contato pelo seu nome e reescreve o arquivo
         public void ApagarContatoPorNome(List<Contato> listaDeContatos,string nome)
         {
 
             listaDeContatos.RemoveAll(c => c.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
 
-            // Serializa a lista atualizada de contatos de volta para JSON
             string path = "..\\..\\..\\contatos.json";
             string json = JsonConvert.SerializeObject(listaDeContatos, Formatting.Indented);
 
-            // Salva o JSON no arquivo
             File.WriteAllText(path, json);
 
         }
