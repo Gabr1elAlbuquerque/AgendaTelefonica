@@ -61,15 +61,17 @@
             // txtNome
             // 
             txtNome.Location = new Point(12, 60);
+            txtNome.MaxLength = 100;
             txtNome.Name = "txtNome";
-            txtNome.Size = new Size(244, 23);
+            txtNome.Size = new Size(577, 23);
             txtNome.TabIndex = 1;
             // 
             // txtEmail
             // 
             txtEmail.Location = new Point(12, 136);
+            txtEmail.MaxLength = 100;
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(244, 23);
+            txtEmail.Size = new Size(577, 23);
             txtEmail.TabIndex = 2;
             // 
             // btnEditar
@@ -78,7 +80,7 @@
             btnEditar.Name = "btnEditar";
             btnEditar.Size = new Size(103, 23);
             btnEditar.TabIndex = 0;
-            btnEditar.Text = "Editar dados";
+            btnEditar.Text = "Editar Contato";
             btnEditar.UseVisualStyleBackColor = true;
             btnEditar.Click += btnEditar_Click;
             // 

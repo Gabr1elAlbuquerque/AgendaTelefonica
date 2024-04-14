@@ -1,6 +1,6 @@
 ﻿namespace agua
 {
-    partial class Form1
+    partial class Cadastro
     {
         /// <summary>
         ///  Required designer variable.
@@ -47,11 +47,11 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(240, 150);
             dataGridView1.TabIndex = 2;
-           
             // 
             // txtNome
             // 
             txtNome.Location = new Point(12, 64);
+            txtNome.MaxLength = 100;
             txtNome.Name = "txtNome";
             txtNome.Size = new Size(259, 23);
             txtNome.TabIndex = 0;
@@ -69,6 +69,7 @@
             // txtEmail
             // 
             txtEmail.Location = new Point(12, 136);
+            txtEmail.MaxLength = 100;
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(259, 23);
             txtEmail.TabIndex = 1;
@@ -110,7 +111,7 @@
             label2.TabIndex = 7;
             label2.Text = "E-mail:";
             // 
-            // Form1
+            // Cadastro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -123,8 +124,9 @@
             Controls.Add(btnSalvar);
             Controls.Add(txtNome);
             Controls.Add(dataGridView1);
-            Name = "Form1";
+            Name = "Cadastro";
             Text = "Form1";
+            Load += Cadastro_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ResumeLayout(false);

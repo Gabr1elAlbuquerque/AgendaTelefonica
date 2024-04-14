@@ -21,7 +21,7 @@ namespace agua
         }
 
         //carrega a lisat com os dados do arquivo
-        public void CarregarContatosDoJson()
+        private void CarregarContatosDoJson()
         {
             string filePath = "..\\..\\..\\contatos.json";
 
@@ -35,17 +35,21 @@ namespace agua
             }
             else
             {
-                MessageBox.Show("O arquivo de contatos não foi encontrado!");
+                // parte nova
+                List<Contato> listaVazia = new List<Contato>();
+                string json = JsonConvert.SerializeObject(listaVazia);
+                File.WriteAllText(filePath, json);
             }
         }
 
         //carrega a lista de contatos
-        public void CarregaLista()
+        private void CarregaLista()
         {
 
             if (listaDeContatos == null || listaDeContatos.Count == 0)
             {
-                MessageBox.Show("Não há contatos para carregar!");
+            
+                listBox1.Items.Add("Não há contatos para carregar!");
                 return;
             }
 
@@ -94,7 +98,7 @@ namespace agua
         // evento que acontece ao clilcar no botão btnCadastrar
         private void btnCadastrar_Click(object sender, EventArgs e)
         {
-            new Form1(this).Show();
+            new Cadastro(this).Show();
         }
 
         // atualiza os contatos json e atualiza eles na tela

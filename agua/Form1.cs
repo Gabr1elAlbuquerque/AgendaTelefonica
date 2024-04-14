@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace agua
 {
-    public partial class Form1 : Form
+    public partial class Cadastro : Form
     {
 
         //variavel aux que vai receber o form de inicio
         private Inicio inicioAux;
 
         // construtor
-        public Form1(Inicio inicio)
+        public Cadastro(Inicio inicio)
         {
             InitializeComponent();
             InitializeDataGridView();
@@ -185,10 +185,7 @@ namespace agua
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
-        }
 
 
         // evento que acontece ao clilcar no botão btnSalvar
@@ -204,7 +201,7 @@ namespace agua
 
             if (!validacao.ValidaNome(novoNome))
             {
-                MessageBox.Show("Digite um nome válido");
+               
                 return;
             }
 
@@ -227,7 +224,7 @@ namespace agua
 
             if (!validacao.VerificarEmail(novoEmail))
             {
-                MessageBox.Show("Digite um e-mail valido agua");
+               
                 return;
             }
 
@@ -237,9 +234,10 @@ namespace agua
                 return;
             }
 
-            if (!string.IsNullOrEmpty(novoEmail) && validacao.EmailJaExiste(inicioAux.listaDeContatos, novoEmail))
+            Contato contatoEmail = validacao.EmailJaExiste(inicioAux.listaDeContatos, novoEmail);
+            if (!string.IsNullOrEmpty(novoEmail) && !contatoEmail.Email.Equals("souvalido"))
             {
-                MessageBox.Show("Já existe um contato com esse email.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Já existe um contato com esse email no contato {contatoEmail.Nome}.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -248,29 +246,33 @@ namespace agua
                 if (!row.IsNewRow)
                 {
                     string celular = Convert.ToString(row.Cells[0].Value);
-                    if (validacao.CelularJaExiste(inicioAux.listaDeContatos, celular))
+                    Contato contatoCelular = validacao.CelularJaExiste(inicioAux.listaDeContatos, celular);
+                    if (!contatoCelular.Celulares[0].Equals("souvalido"))
                     {
-                        MessageBox.Show("Já existe um contato com esse celular.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Já existe  um contato com esse telefone no contato {contatoCelular.Nome}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
             }
 
+            
             foreach (DataGridViewRow row in dataGridView2.Rows)
             {
                 if (!row.IsNewRow)
                 {
                     string telefone = Convert.ToString(row.Cells[0].Value);
-                    if (validacao.TelefoneJaExiste(inicioAux.listaDeContatos, telefone))
+                    Contato contatoTelefone = validacao.TelefoneJaExiste(inicioAux.listaDeContatos, telefone);
+                    if (!contatoTelefone.Telefones[0].Equals("souvalido"))
                     {
-                        MessageBox.Show("Já existe um contato com esse telefone.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Já existe  um contato com esse telefone no contato {contatoTelefone.Nome}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
             }
 
-            ArquivoJson contatosJson = new ArquivoJson();
-            contatosJson.SalvarDados(inicioAux.listaDeContatos, novoNome, novoEmail, dataGridView1, dataGridView2);
+            ContatosJson contatosJson = new ContatosJson("..\\..\\..\\contatos.json");
+            Contato novoContato = contatosJson.PreparaContato(novoNome, novoEmail, dataGridView1, dataGridView2);
+            contatosJson.SalvarDados(inicioAux.listaDeContatos, novoContato);
             inicioAux.AtualizarContatos();
 
             MessageBox.Show("Dados salvos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -289,6 +291,8 @@ namespace agua
             }
         }
 
+
+
         // evento que acontece ao clilcar no botão  btnLimpar
         private void btnLimpar_Click(object sender, EventArgs e)
         {
@@ -301,7 +305,10 @@ namespace agua
 
         }
 
-      
+        private void Cadastro_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

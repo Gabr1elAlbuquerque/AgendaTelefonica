@@ -27,7 +27,10 @@ public class Contato
 
     public Contato()
     {
-
+        Celulares = new List<string>();
+        Telefones = new List<string>();
     }
+
+
 
 }

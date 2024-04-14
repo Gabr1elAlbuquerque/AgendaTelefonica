@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace agua
 {
@@ -12,7 +13,7 @@ namespace agua
     internal class Validacao
     {
 
-        private Regex regex = new Regex(@"^[A-Za-z0-9_@.-]+$");
+       
 
         // verifica o nome digitado é valido
         public bool ValidaNome(string nome)
@@ -21,10 +22,12 @@ namespace agua
 
             if (nome.Contains(" ") || nome.Trim().Equals(""))
             {
+                MessageBox.Show("Digite um nome válido.\n O nome não pode ser vazio .", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 valido = false;
             }
             else if (!char.IsLetter(nome[0]))
             {
+                MessageBox.Show("Digite um nome válido.\n O nome deve começar com uma letra.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 valido = false;
             }
 
@@ -34,6 +37,7 @@ namespace agua
         // verifica se o número de celular é valido
         public bool VerificarNumeroCelular(DataGridView dataCelualr)
         {
+            string padrao = @"^55\(\d{2}\)\d{5}-\d{4}$";
             bool valido = true;
             foreach (DataGridViewRow row in dataCelualr.Rows)
             {
@@ -41,12 +45,21 @@ namespace agua
 
                 if (!row.IsNewRow)
                 {
+
                     string celular = Convert.ToString(row.Cells[0].Value);
+
+                    if (!VerificaMascara(celular, padrao))
+                    {
+                        MessageBox.Show($"{celular} não é um número válido. \nPadrão a ser usado 55(99)99999-9999");
+                        valido = false;
+                        break;
+                    }
                     if (celular.IndexOf("(00)") != -1)
                     {
 
+
                         valido = false;
-                        MessageBox.Show($"{celular} não é um número válido.");
+                        MessageBox.Show($"{celular} não é um número válido. \n Os dois digitos do DD não podem ser 0");
                         break;
 
                     }
@@ -59,7 +72,7 @@ namespace agua
         // verifica se o número de celular é valido
         public bool VerificarNumeroTelefone(DataGridView dataTelefone)
         {
-
+            string padrao = @"^55\(\d{2}\)\d{4}-\d{4}$";
             bool valido = true;
             foreach (DataGridViewRow row in dataTelefone.Rows)
             {
@@ -67,11 +80,17 @@ namespace agua
                 if (!row.IsNewRow)
                 {
                     string telefone = Convert.ToString(row.Cells[0].Value);
+                    if (!VerificaMascara(telefone, padrao))
+                    {
+                        MessageBox.Show($"{telefone} não é um número válido. \nPadrão a ser usado 55(99)9999-9999");
+                        valido = false;
+                        break;
+                    }
                     if (telefone.IndexOf("(00)") != -1)
                     {
 
                         valido = false;
-                        MessageBox.Show($"{telefone} não é um número válido.");
+                        MessageBox.Show($"{telefone} não é um número válido.\n Os dois digitos do DD não podem ser 0");
                         break;
                     }
                 }
@@ -83,6 +102,8 @@ namespace agua
         // verifica o email é um email valido
         public bool VerificarEmail(string email)
         {
+            Regex regexEmail = new Regex(@"^[A-Za-z0-9_@.-]+$");
+
 
             if (!email.Trim().Equals(""))
             {
@@ -93,8 +114,9 @@ namespace agua
                 int index4 = email.IndexOf(" ");
                 if (index != -1 && index2 != -1 && index3 == -1 && index4 == -1)
                 {
-                    if ((!regex.IsMatch(email) || email.Count(c => c == '@') > 1))
+                    if ((!regexEmail.IsMatch(email) || email.Count(c => c == '@') > 1))
                     {
+                        MessageBox.Show("Digite um e-mail valido. \nExemplo de email válido: \nexemplo@gmail.com, exemplo@hotmail.com,etc.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                     else
@@ -102,6 +124,7 @@ namespace agua
                         return true;
                     }
                 }
+                MessageBox.Show("Digite um e-mail valido. \nExemplo de email válido: \nexemplo@gmail.com, exemplo@hotmail.com,etc.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
 
             }
@@ -121,21 +144,63 @@ namespace agua
         }
 
         // verifica se o email já existena lista de contatos
-        public bool EmailJaExiste(List<Contato> contatos, string email)
+        public Contato EmailJaExiste(List<Contato> contatos, string email)
         {
-            return contatos.Any(c => c.Email != null && c.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            if (contatos.Any(c => c.Email != null && c.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
+            {
+                Contato contato = contatos.Find(c => c.Email == email);
+                return contato;
+            }
+            else
+            {
+                Contato c = new Contato();
+                c.Email = "souvalido";
+                return c;
+            }
+
+           
         }
 
         // verifica se o telefone já existena lista de contatos
-        public bool TelefoneJaExiste(List<Contato> contatos, string telefone)
+        public Contato TelefoneJaExiste(List<Contato> contatos, string telefone)
         {
-            return contatos.Any(c => c.Telefones.Contains(telefone));
+            if( contatos.Any(c => c.Telefones.Contains(telefone)))
+            {
+                Contato contato = contatos.Find(c => c.Telefones.Contains(telefone));
+                return contato;
+            }
+            else
+            {
+                Contato c = new Contato();
+
+                c.Telefones.Add("souvalido");
+                c.Telefones[0] = "souvalido";
+                return c;
+            }
         }
 
         // verifica se o celular já existena lista de contatos
-        public bool CelularJaExiste(List<Contato> contatos, string celular)
+        public Contato CelularJaExiste(List<Contato> contatos, string celular)
         {
-            return contatos.Any(c => c.Celulares.Contains(celular));
+            if (contatos.Any(c => c.Celulares.Contains(celular)))
+            {
+                Contato contato = contatos.Find(c => c.Celulares.Contains(celular));
+                return contato;
+            }
+            else
+            {
+                Contato c = new Contato();
+
+                c.Celulares.Add("souvalido");
+                c.Celulares[0] = "souvalido";
+                return c;
+            }
+        }
+
+        static bool VerificaMascara(string texto, string padrao)
+        {
+            
+            return Regex.IsMatch(texto, padrao);
         }
 
     }

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace agua
 {
+
     public partial class MostrarContato : Form
     {
 
@@ -38,13 +39,7 @@ namespace agua
             btnSalvar.Enabled = false;
         }
 
-        //  construtor da classe
-        public MostrarContato()
-        {
-            InitializeComponent();
-            InitializeDataGridView();
-            InitializeDataGridView2();
-        }
+       
 
         // metodo responsavel por iniciar o grid2
         private void InitializeDataGridView2()
@@ -240,7 +235,7 @@ namespace agua
 
             if (!validacao.ValidaNome(novoNome))
             {
-                MessageBox.Show("Digite um nome válido");
+               
                 return;
             }
 
@@ -257,27 +252,31 @@ namespace agua
 
             if (!validacao.VerificarEmail(novoEmail))
             {
-                MessageBox.Show("Digite um e-mail valido agua");
+               
                 return;
             }
 
-            if (validacao.NomeJaExiste(inicioAux.listaDeContatos, novoNome))
+            if (contatoAux.Nome != novoNome)
             {
-                if (contatoAux.Nome != novoNome)
+                if (validacao.NomeJaExiste(inicioAux.listaDeContatos, novoNome))
                 {
+                
                     MessageBox.Show("Já existe um contato com esse nome.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
 
-            if (!string.IsNullOrEmpty(novoEmail) && validacao.EmailJaExiste(inicioAux.listaDeContatos, novoEmail))
+            Contato contatoEmail = validacao.EmailJaExiste(inicioAux.listaDeContatos, novoEmail);
+            if (contatoAux.Email != novoEmail)
             {
-                if (contatoAux.Email != novoEmail)
+                if (!string.IsNullOrEmpty(novoEmail) && !contatoEmail.Email.Equals("souvalido"))
                 {
-                    MessageBox.Show("Já existe um contato com esse email.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+               
+                    MessageBox.Show($"Já existe um contato com esse email no contato {contatoEmail.Nome}.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
-                }
+                } 
             }
+
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
@@ -285,11 +284,13 @@ namespace agua
                 {
 
                     string celular = Convert.ToString(row.Cells[0].Value);
+                    Contato contatoCelular = validacao.CelularJaExiste(inicioAux.listaDeContatos, celular);
                     if (!contatoAux.Celulares.Contains(celular))
                     {
-                        if (validacao.CelularJaExiste(inicioAux.listaDeContatos, celular))
+                        
+                        if (!contatoCelular.Celulares[0].Equals("souvalido"))
                         {
-                            MessageBox.Show("Já existe um contato com esse celular.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"Já existe  um contato com esse telefone no contato {contatoCelular.Nome}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                     }
@@ -304,21 +305,24 @@ namespace agua
                     string telefone = Convert.ToString(row.Cells[0].Value);
                     if (!contatoAux.Telefones.Contains(telefone))
                     {
-                        if (validacao.TelefoneJaExiste(inicioAux.listaDeContatos, telefone))
+                        Contato contatoTelefone = validacao.TelefoneJaExiste(inicioAux.listaDeContatos, telefone);
+                        if (!contatoTelefone.Telefones[0].Equals("souvalido"))
                         {
-                            MessageBox.Show("Já existe um contato com esse telefone.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"Já existe  um contato com esse telefone no contato {contatoTelefone.Nome}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                     }
+                    }
                 }
-            }
 
-            ArquivoJson contatosJson = new ArquivoJson();
+            ContatosJson contatosJson = new ContatosJson("..\\..\\..\\contatos.json");
+            Contato novoContato = contatosJson.PreparaContato(novoNome, novoEmail, dataGridView1, dataGridView2);
 
             inicioAux.listaDeContatos.RemoveAll(c => c.Nome.Equals(contatoAux.Nome, StringComparison.OrdinalIgnoreCase));
 
-            contatosJson.SalvarDados(inicioAux.listaDeContatos, novoNome, novoEmail, dataGridView1, dataGridView2);
+            contatosJson.SalvarDados(inicioAux.listaDeContatos, novoContato);
             contatoAux = contatosJson.contato;
+
             inicioAux.AtualizarContatos();
 
             MessageBox.Show("Dados salvos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -341,9 +345,10 @@ namespace agua
         // evento que acontece ao clilcar no botão btnApagar
         private void btnApagar_Click(object sender, EventArgs e)
         {
-            ArquivoJson contatosJson = new ArquivoJson();
+            ContatosJson contatosJson = new ContatosJson("..\\..\\..\\contatos.json");
+           
 
-            contatosJson.ApagarContatoPorNome(inicioAux.listaDeContatos, contatoAux.Nome);
+            contatosJson.ApagarDado(inicioAux.listaDeContatos, contatoAux.Nome);
 
             inicioAux.AtualizarContatos();
             MessageBox.Show($"{contatoAux.Nome} foi deletado com sucesso");
@@ -379,6 +384,7 @@ namespace agua
         {
 
         }
+        
     }
 
 }
