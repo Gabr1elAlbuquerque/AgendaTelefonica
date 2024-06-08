@@ -154,7 +154,7 @@ namespace ProjetoAgendaTelefonica
             else
             {
                 Contato c = new Contato();
-                c.Email = "souvalido";
+                c.Email = "true";
                 return c;
             }
 
@@ -173,8 +173,8 @@ namespace ProjetoAgendaTelefonica
             {
                 Contato c = new Contato();
 
-                c.Telefones.Add("souvalido");
-                c.Telefones[0] = "souvalido";
+                c.Telefones.Add("true");
+                c.Telefones[0] = "true";
                 return c;
             }
         }
@@ -191,8 +191,8 @@ namespace ProjetoAgendaTelefonica
             {
                 Contato c = new Contato();
 
-                c.Celulares.Add("souvalido");
-                c.Celulares[0] = "souvalido";
+                c.Celulares.Add("true");
+                c.Celulares[0] = "true";
                 return c;
             }
         }

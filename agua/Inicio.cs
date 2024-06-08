@@ -90,7 +90,7 @@ namespace ProjetoAgendaTelefonica
                         new MostrarContato(contato, this).Show();
                         contatosAbetos.Add(nomeSelecionado);
                     }
-
+                    
                 }
                 else
                 {

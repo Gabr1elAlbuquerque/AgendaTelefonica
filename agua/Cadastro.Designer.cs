@@ -125,7 +125,7 @@
             Controls.Add(txtNome);
             Controls.Add(dataGridView1);
             Name = "Cadastro";
-            Text = "Form1";
+            Text = "Cadastro";
             Load += Cadastro_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();

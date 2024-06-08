@@ -235,7 +235,7 @@ namespace ProjetoAgendaTelefonica
             }
 
             Contato contatoEmail = validacao.EmailJaExiste(inicioAux.listaDeContatos, novoEmail);
-            if (!string.IsNullOrEmpty(novoEmail) && !contatoEmail.Email.Equals("souvalido"))
+            if (!string.IsNullOrEmpty(novoEmail) && !contatoEmail.Email.Equals("true"))
             {
                 MessageBox.Show($"Já existe um contato com esse email no contato {contatoEmail.Nome}.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -247,7 +247,7 @@ namespace ProjetoAgendaTelefonica
                 {
                     string celular = Convert.ToString(row.Cells[0].Value);
                     Contato contatoCelular = validacao.CelularJaExiste(inicioAux.listaDeContatos, celular);
-                    if (!contatoCelular.Celulares[0].Equals("souvalido"))
+                    if (!contatoCelular.Celulares[0].Equals("true"))
                     {
                         MessageBox.Show($"Já existe  um contato com esse telefone no contato {contatoCelular.Nome}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -262,7 +262,7 @@ namespace ProjetoAgendaTelefonica
                 {
                     string telefone = Convert.ToString(row.Cells[0].Value);
                     Contato contatoTelefone = validacao.TelefoneJaExiste(inicioAux.listaDeContatos, telefone);
-                    if (!contatoTelefone.Telefones[0].Equals("souvalido"))
+                    if (!contatoTelefone.Telefones[0].Equals("true"))
                     {
                         MessageBox.Show($"Já existe  um contato com esse telefone no contato {contatoTelefone.Nome}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
