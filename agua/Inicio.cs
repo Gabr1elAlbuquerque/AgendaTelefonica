@@ -9,8 +9,9 @@ namespace agua
 {
     public partial class Inicio : Form
     {
-       // lista de contatos
-       public List<Contato> listaDeContatos; 
+        // lista de contatos
+        public List<Contato> listaDeContatos;
+        public List<string> contatosAbetos = new List<string>();
 
         // construtor do arquivo
         public Inicio()
@@ -75,25 +76,28 @@ namespace agua
         {
             if (listBox1.SelectedItem != null)
             {
-                // Obtém o nome selecionado na ListBox
+                
                 string nomeSelecionado = listBox1.SelectedItem.ToString();
 
-                // Procura na lista de contatos pelo nome correspondente
-                Contato contato = listaDeContatos.Find(c => c.Nome == nomeSelecionado);
-
-                // Se o contato for encontrado, exibe seus dados em um MessageBox
-                if (contato != null)
+                if (!contatosAbetos.Contains(nomeSelecionado))
                 {
 
-                    new MostrarContato(contato,this).Show();
+                    Contato contato = listaDeContatos.Find(c => c.Nome == nomeSelecionado);
 
+                    if (contato != null)
+                    {
+
+                        new MostrarContato(contato, this).Show();
+                        contatosAbetos.Add(nomeSelecionado);
+                    }
+                    
                 }
                 else
                 {
-                    
+                    MessageBox.Show($"O contato {nomeSelecionado} já está aberto.");
+                }
                 }
             }
-        }
 
         // evento que acontece ao clilcar no botão btnCadastrar
         private void btnCadastrar_Click(object sender, EventArgs e)

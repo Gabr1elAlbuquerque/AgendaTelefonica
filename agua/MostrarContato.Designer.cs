@@ -76,7 +76,7 @@
             // 
             // btnEditar
             // 
-            btnEditar.Location = new Point(305, 379);
+            btnEditar.Location = new Point(331, 379);
             btnEditar.Name = "btnEditar";
             btnEditar.Size = new Size(103, 23);
             btnEditar.TabIndex = 0;
@@ -98,9 +98,9 @@
             // 
             btnApagar.Location = new Point(224, 379);
             btnApagar.Name = "btnApagar";
-            btnApagar.Size = new Size(75, 23);
+            btnApagar.Size = new Size(101, 23);
             btnApagar.TabIndex = 7;
-            btnApagar.Text = "Apagar";
+            btnApagar.Text = "Excluir contato";
             btnApagar.UseVisualStyleBackColor = true;
             btnApagar.Click += btnApagar_Click;
             // 
@@ -149,6 +149,7 @@
             Controls.Add(dataGridView1);
             Name = "MostrarContato";
             Text = "MostrarContato";
+            FormClosed += MostrarContato_FormClosed;
             Load += MostrarContato_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();

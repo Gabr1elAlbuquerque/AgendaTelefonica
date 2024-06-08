@@ -201,7 +201,7 @@ namespace agua
 
             if (!validacao.ValidaNome(novoNome))
             {
-               
+
                 return;
             }
 
@@ -224,7 +224,7 @@ namespace agua
 
             if (!validacao.VerificarEmail(novoEmail))
             {
-               
+
                 return;
             }
 
@@ -255,7 +255,7 @@ namespace agua
                 }
             }
 
-            
+
             foreach (DataGridViewRow row in dataGridView2.Rows)
             {
                 if (!row.IsNewRow)
@@ -276,6 +276,8 @@ namespace agua
             inicioAux.AtualizarContatos();
 
             MessageBox.Show("Dados salvos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Limpar();
+            this.Close();
 
         }
 
@@ -296,19 +298,25 @@ namespace agua
         // evento que acontece ao clilcar no botão  btnLimpar
         private void btnLimpar_Click(object sender, EventArgs e)
         {
+            Limpar();
+
+        }
+
+        private void Limpar()
+        {
 
             dataGridView1.Rows.Clear();
             dataGridView2.Rows.Clear();
             txtEmail.Text = "";
             txtNome.Text = "";
-
-
         }
 
         private void Cadastro_Load(object sender, EventArgs e)
         {
 
         }
+
+        
     }
 
 }

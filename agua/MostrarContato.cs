@@ -39,7 +39,7 @@ namespace agua
             btnSalvar.Enabled = false;
         }
 
-       
+
 
         // metodo responsavel por iniciar o grid2
         private void InitializeDataGridView2()
@@ -198,11 +198,6 @@ namespace agua
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         // evento que é chamado quando clico no botão excluir no dataGrid
         private void DataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -218,6 +213,13 @@ namespace agua
         // evento que acontece ao clilcar no botão btnSalvar
         private void btnSalvar_Click_1(object sender, EventArgs e)
         {
+
+            DialogResult result = MessageBox.Show($"Deseja realmente gravar as  alterações?.", "Gravar alterações", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.No)
+            {
+                return;
+            }
 
             Validacao validacao = new Validacao();
 
@@ -235,7 +237,7 @@ namespace agua
 
             if (!validacao.ValidaNome(novoNome))
             {
-               
+
                 return;
             }
 
@@ -252,7 +254,7 @@ namespace agua
 
             if (!validacao.VerificarEmail(novoEmail))
             {
-               
+
                 return;
             }
 
@@ -260,7 +262,7 @@ namespace agua
             {
                 if (validacao.NomeJaExiste(inicioAux.listaDeContatos, novoNome))
                 {
-                
+
                     MessageBox.Show("Já existe um contato com esse nome.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -271,10 +273,10 @@ namespace agua
             {
                 if (!string.IsNullOrEmpty(novoEmail) && !contatoEmail.Email.Equals("souvalido"))
                 {
-               
+
                     MessageBox.Show($"Já existe um contato com esse email no contato {contatoEmail.Nome}.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
-                } 
+                }
             }
 
 
@@ -287,7 +289,7 @@ namespace agua
                     Contato contatoCelular = validacao.CelularJaExiste(inicioAux.listaDeContatos, celular);
                     if (!contatoAux.Celulares.Contains(celular))
                     {
-                        
+
                         if (!contatoCelular.Celulares[0].Equals("souvalido"))
                         {
                             MessageBox.Show($"Já existe  um contato com esse telefone no contato {contatoCelular.Nome}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -312,8 +314,8 @@ namespace agua
                             return;
                         }
                     }
-                    }
                 }
+            }
 
             ContatosJson contatosJson = new ContatosJson("..\\..\\..\\contatos.json");
             Contato novoContato = contatosJson.PreparaContato(novoNome, novoEmail, dataGridView1, dataGridView2);
@@ -326,12 +328,30 @@ namespace agua
             inicioAux.AtualizarContatos();
 
             MessageBox.Show("Dados salvos com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+            this.Close();
         }
 
         // evento que acontece ao clilcar no botão btnEditar
         private void btnEditar_Click(object sender, EventArgs e)
         {
+
+            if (!ComparaAlteracoes())
+            {
+
+                DialogResult result = MessageBox.Show($" Existem alterações não salvas, deseja continuar?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+
+                dataGridView1.Rows.Clear();
+                dataGridView2.Rows.Clear();
+                popularGrid();
+
+                
+            }
             txtNome.Enabled = !txtNome.Enabled;
             txtEmail.Enabled = !txtEmail.Enabled;
             btnDescartarAlteracoes.Enabled = !btnDescartarAlteracoes.Enabled;
@@ -340,13 +360,24 @@ namespace agua
             dataGridView1.Enabled = !dataGridView1.Enabled;
             dataGridView2.Enabled = !dataGridView2.Enabled;
             btnEditar.Text = txtNome.Enabled ? "Cancelar edição" : "Editar dados";
+
         }
 
         // evento que acontece ao clilcar no botão btnApagar
         private void btnApagar_Click(object sender, EventArgs e)
         {
+
+
+            DialogResult result = MessageBox.Show($"Tem certeza que deseja apagar o contato de {contatoAux.Nome}.", "Confirmar exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.No)
+            {
+                return;
+            }
+
+
             ContatosJson contatosJson = new ContatosJson("..\\..\\..\\contatos.json");
-           
+
 
             contatosJson.ApagarDado(inicioAux.listaDeContatos, contatoAux.Nome);
 
@@ -364,7 +395,7 @@ namespace agua
             {
                 dataGridView1.Rows.Add(telefone);
             }
-            // Popula o dataGridView2 com os números de celular do contato
+
             foreach (var celular in contatoAux.Telefones)
             {
                 dataGridView2.Rows.Add(celular);
@@ -373,9 +404,21 @@ namespace agua
 
         private void btnDescartarAlteracoes_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Clear();
-            dataGridView2.Rows.Clear();
-            popularGrid();
+            if (!ComparaAlteracoes())
+            {
+
+                DialogResult result = MessageBox.Show($"Deseja realmente descartar alterações não salvas?.", "Descartar alterações", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+
+                dataGridView1.Rows.Clear();
+                dataGridView2.Rows.Clear();
+                popularGrid();
+            }
 
 
         }
@@ -384,7 +427,57 @@ namespace agua
         {
 
         }
-        
+        private List<String> GridParaLista(DataGridView grid)
+        {
+
+            List<string> lista = new List<string>();
+
+            foreach (DataGridViewRow row in grid.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    string dado = Convert.ToString(row.Cells[0].Value);
+                    lista.Add(dado);
+                }
+            }
+            return lista;
+        }
+
+        private void MostrarContato_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            inicioAux.contatosAbetos.Remove(contatoAux.Nome);
+        }
+
+        private bool ComparaAlteracoes()
+        {
+            string nome = txtNome.Text.Trim();
+            string email = txtEmail.Text.Trim();
+            string emailAux;
+            List<string> celular  = GridParaLista(dataGridView1);
+
+            List<string> telefone = GridParaLista(dataGridView2);
+
+            celular.Sort();
+            telefone.Sort();
+            contatoAux.Celulares.Sort();
+            contatoAux.Telefones.Sort();
+            
+            if (contatoAux.Email is null)
+            {
+                emailAux = "";
+            }
+            else
+            {
+                emailAux = contatoAux.Email;
+            }
+           
+            if (!nome.Equals(contatoAux.Nome) || !email.Equals(emailAux)||! celular.SequenceEqual(contatoAux.Celulares)|| !telefone.SequenceEqual(contatoAux.Telefones))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 
 }
