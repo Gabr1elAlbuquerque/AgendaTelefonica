@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace agua
+namespace ProjetoAgendaTelefonica
 {
     public partial class Cadastro : Form
     {

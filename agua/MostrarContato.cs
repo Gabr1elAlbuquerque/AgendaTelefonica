@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace agua
+namespace ProjetoAgendaTelefonica
 {
 
     public partial class MostrarContato : Form

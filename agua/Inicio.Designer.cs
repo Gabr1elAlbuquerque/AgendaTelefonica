@@ -1,4 +1,4 @@
-﻿namespace agua
+﻿namespace ProjetoAgendaTelefonica
 {
     partial class Inicio
     {
@@ -61,6 +61,7 @@
             Controls.Add(listBox1);
             Name = "Inicio";
             Text = "Inicio";
+            Load += Inicio_Load;
             ResumeLayout(false);
         }
 

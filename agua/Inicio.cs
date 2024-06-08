@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace agua
+namespace ProjetoAgendaTelefonica
 {
     public partial class Inicio : Form
     {
@@ -17,7 +17,7 @@ namespace agua
         public Inicio()
         {
             InitializeComponent();
-            CarregarContatosDoJson(); 
+            CarregarContatosDoJson();
             CarregaLista();
         }
 
@@ -28,7 +28,7 @@ namespace agua
 
             if (File.Exists(filePath))
             {
-             
+
                 string json = File.ReadAllText(filePath);
 
 
@@ -49,7 +49,7 @@ namespace agua
 
             if (listaDeContatos == null || listaDeContatos.Count == 0)
             {
-            
+
                 listBox1.Items.Add("Não há contatos para carregar!");
                 return;
             }
@@ -76,7 +76,7 @@ namespace agua
         {
             if (listBox1.SelectedItem != null)
             {
-                
+
                 string nomeSelecionado = listBox1.SelectedItem.ToString();
 
                 if (!contatosAbetos.Contains(nomeSelecionado))
@@ -90,14 +90,14 @@ namespace agua
                         new MostrarContato(contato, this).Show();
                         contatosAbetos.Add(nomeSelecionado);
                     }
-                    
+
                 }
                 else
                 {
                     MessageBox.Show($"O contato {nomeSelecionado} já está aberto.");
                 }
-                }
             }
+        }
 
         // evento que acontece ao clilcar no botão btnCadastrar
         private void btnCadastrar_Click(object sender, EventArgs e)
@@ -109,8 +109,13 @@ namespace agua
         public void AtualizarContatos()
         {
             listBox1.Items.Clear();
-            CarregarContatosDoJson(); 
-            CarregaLista(); 
+            CarregarContatosDoJson();
+            CarregaLista();
+        }
+
+        private void Inicio_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

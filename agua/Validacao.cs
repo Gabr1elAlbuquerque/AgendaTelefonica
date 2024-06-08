@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
-namespace agua
+namespace ProjetoAgendaTelefonica
 {
     // classe responsavel pelas validações
     internal class Validacao

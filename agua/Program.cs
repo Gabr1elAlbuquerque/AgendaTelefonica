@@ -1,4 +1,4 @@
-namespace agua
+namespace ProjetoAgendaTelefonica
 {
     internal static class Program
     {
